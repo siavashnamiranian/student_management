@@ -3,14 +3,15 @@ from tkinter import *
 #windows
 root = Tk()
 root.title("student management")
+root.geometry("250x100")
 
 #user name label and entry
-username_var=StringVar()
-label = Label( root, textvariable=username_var, relief=RAISED )
-username_var.set("user name:")
+usernamelabel_var=StringVar()
+label = Label( root, textvariable=usernamelabel_var, relief=RAISED )
+usernamelabel_var.set("user name:")
 
-entry_var=StringVar()
-entry=Entry(root,textvariable=entry_var)
+usernameentry_var=StringVar()
+entry=Entry(root,textvariable=usernameentry_var)
 
 label.grid(row=0,column=0)
 entry.grid(row=0,column=1)
@@ -21,7 +22,7 @@ label_pass = Label( root, textvariable=pass_var, relief=RAISED )
 pass_var.set("password:")
 
 entry_var=StringVar()
-entry_pass=Entry(root,textvariable=entry_var)
+entry_pass=Entry(root,textvariable=entry_var,show="*")
 
 label_pass.grid(row=1,column=0)
 entry_pass.grid(row=1,column=1)

@@ -1,35 +1,54 @@
 from tkinter import *
+import tkinter.ttk as ttk
+import sqlite3
+from sqlite3 import Error
 
 #windows
-root = Tk()
-root.title("student management")
-root.geometry("250x100")
+class login_window:
+    def __init__(self,root):
+        self.root=root
+        self.root.title("student management")
+        self.root.geometry("250x100")
 
-#user name label and entry
-usernamelabel_var=StringVar()
-label = Label( root, textvariable=usernamelabel_var, relief=RAISED )
-usernamelabel_var.set("user name:")
+        #user name label and entry
+        label = Label( root, text="user name:")
 
-usernameentry_var=StringVar()
-entry=Entry(root,textvariable=usernameentry_var)
+        self.username_var=StringVar()
+        entry=Entry(root,textvariable=self.username_var)
 
-label.grid(row=0,column=0)
-entry.grid(row=0,column=1)
+        label.grid(row=0,column=0)
+        entry.grid(row=0,column=1)
 
-#password label and entry
-pass_var=StringVar()
-label_pass = Label( root, textvariable=pass_var, relief=RAISED )
-pass_var.set("password:")
+        #password label and entry
+        label_pass = Label( root, text="password:")
 
-entry_var=StringVar()
-entry_pass=Entry(root,textvariable=entry_var,show="*")
+        self.password=StringVar()
+        entry_pass=Entry(root,textvariable=self.password,show="*")
 
-label_pass.grid(row=1,column=0)
-entry_pass.grid(row=1,column=1)
-#login button
-login_btn = Button(root, text = 'log in', bd = '5', command = root.destroy)
-login_btn.grid(row=2,column=0)
-#register button
-register_btn = Button(root, text = 'register', bd = '5', command = root.destroy)
-register_btn.grid(row=2,column=1)
-root.mainloop()
+        label_pass.grid(row=1,column=0)
+        entry_pass.grid(row=1,column=1)
+        #login button
+        login_btn = Button(root, text = 'log in', command = self.secondScreen)
+        login_btn.grid(row=2,column=0)
+        #register button
+        register_btn = Button(root, text = 'register', command = root.destroy)
+        register_btn.grid(row=2,column=1)
+    def secondScreen(self):
+        root2 = Toplevel(self.root)
+        enter = EnterData(root)
+class EnterData:
+    def __init__(self,root):
+        self.root = root
+        self.root.geometry('800x500')
+        self.root.title("Student Management(Enter Data)")
+        self.name = StringVar()
+        self.dob = StringVar()
+        self.roll = StringVar()
+        self.gen = StringVar()
+
+
+
+if __name__ == "__main__":
+    root = Tk()
+    l = login_window(root)
+    root.mainloop()

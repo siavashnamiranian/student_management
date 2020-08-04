@@ -98,42 +98,32 @@ class enter_data_window:
         root3 = Toplevel(self.root)
         show = show_details_window(root3)
 
+
 class show_details_window:
     def __init__(self,root):
         self.root = root
-        self.root.geometry('800x500')
+        self.root.state("zoomed")
         self.root.title("students viewer")
-        #==========================Show Frame
-        show_frame = Frame(self.root,bg = "#B402FE")
-        show_frame.place(width = 800,x = 0,y = 0 ,height = 50)
-        labl_show = Label(show_frame,bg = "#B402FE",fg = "white",font = ("lucida",25,"bold"),text = "Details of Students")
-        labl_show.pack()
-        #========================Main Frame
-        main_frame = Frame(self.root,bd = 10,relief = SUNKEN)
-        main_frame.place(width = 780,height = 430,x = 8,y = 58)
-        tree = ttk.Treeview(main_frame,height = 200)
-        tree['columns'] = ("Name","Roll No","D-O-B","Gender")
-        tree.column('#0',width=50,minwidth = 25)
-        tree.column('Name',width=50,minwidth = 25)
-        tree.column('Roll No',width=50,minwidth = 25)
-        tree.column('D-O-B',width=50,minwidth = 25)
-        tree.column('Gender',width=50,minwidth = 25)
-        tree.heading("#0",text = "ID",anchor = W)
-        tree.heading("Name",text = "Name",anchor = W)
-        tree.heading("Roll No",text = "Roll No",anchor = W)
-        tree.heading("D-O-B",text = "D-O-B",anchor = W)
-        tree.heading("Gender",text="Gender",anchor = W)
-        con = sq.connect('data.db')
-        cursor = con.cursor()
-        cursor.execute("SELECT * FROM stu_data")
-        result = cursor.fetchall()
-        for i in result:
-            tree.insert("","end",text = f"{i[0]}",values = (f'{i[1]}',f'{i[2]}',f'{i[3]}',f'{i[4]}'))
-        vsb = ttk.Scrollbar(main_frame,command = tree.yview,orient = "vertical")
-        tree.configure(yscroll = vsb.set)
-        vsb.pack(side = RIGHT,fill = Y)
-        tree.pack(side = TOP,fill = X)
+        #==========================tree
+        tree=ttk.Treeview(self.root,column=("column1","column2","column3","column4"),show="headings")
+        # xscrollbar=ttk.Scrollbar(self.root,orient="horizontal",command=tree.xview)
+        # tree.configure(xscrollcommand=xscrollbar.set)
+        # xscrollbar.grid(row=4,column=0,sticky="ew")
+        # xscrollbar.configure(command=tree.xview)
+        tree.heading("#1",text="name")
+        tree.heading("#2",text="roll")
+        tree.heading("#3",text="dob")
+        tree.heading("#4",text="gender")
+        conn = sqlite3.connect(r'C:\Users\sia\Documents\GitHub\student_management\data.db')
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM student_data")
+        rows = cur.fetchall()
+        for row in rows:
+            tree.insert("",END,values=row)
+        conn.close()
 
+        tree.pack()
+        
 
 if __name__ == "__main__":
     root = Tk()

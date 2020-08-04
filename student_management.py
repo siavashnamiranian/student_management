@@ -46,6 +46,34 @@ class EnterData:
         self.roll = StringVar()
         self.gen = StringVar()
 
+<<<<<<< Updated upstream
+=======
+class show_details_window:
+    def __init__(self,root):
+        self.root = root
+        self.root.state("zoomed")
+        self.root.title("students viewer")
+        #==========================tree
+        tree=ttk.Treeview(self.root,column=("column1","column2","column3","column4"),show="headings")
+        # xscrollbar=ttk.Scrollbar(self.root,orient="horizontal",command=tree.xview)
+        # tree.configure(xscrollcommand=xscrollbar.set)
+        # xscrollbar.grid(row=4,column=0,sticky="ew")
+        # xscrollbar.configure(command=tree.xview)
+        tree.heading("#1",text="name")
+        tree.heading("#2",text="roll")
+        tree.heading("#3",text="dob")
+        tree.heading("#4",text="gender")
+        conn = sqlite3.connect(r'C:\Users\sia\Documents\GitHub\student_management\data.db')
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM student_data")
+        rows = cur.fetchall()
+        for row in rows:
+            tree.insert("",END,values=row)
+        conn.close()
+
+        tree.pack()
+        
+>>>>>>> Stashed changes
 
 
 if __name__ == "__main__":

@@ -33,8 +33,8 @@ class login_window:
         register_btn.grid(row=2,column=1)
     def secondScreen(self):
         root2 = Toplevel(self.root)
-        enter = EnterData(root2)
-class EnterData:
+        enter = enter_data_window(root2)
+class enter_data_window:
     def __init__(self,root):
         self.dataStart()
         self.root = root
@@ -70,28 +70,69 @@ class EnterData:
         #submit button
         btn_submit=Button(self.root,text="submit",command=self.submitdata)
         btn_submit.grid(row=4,column=0)
+        #show button
+        btn_show=Button(self.root,text="show details",command=self.show_details)
+        btn_show.grid(row=4,column=1)
 
     def dataStart(self):
-            con = sqlite3.connect(r'C:\Users\sia\Documents\GitHub\student_management\data.db')
-            cursor = con.cursor()
+            conn = sqlite3.connect(r'C:\Users\sia\Documents\GitHub\student_management\data.db')
+            cursor = conn.cursor()
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS stu_data(
+                CREATE TABLE IF NOT EXISTS student_data(
                 Name TEXT NOT NULL,
                 roll TEXT NOT NULL,
                 dob TEXT NOT NULL,
                 gender TEXT NOT NULL
                 )
             """)
-            con.commit()
-            con.close()
+            conn.commit()
+            conn.close()
 
     def submitdata(self):
-        con = sqlite3.connect(r'C:\Users\sia\Documents\GitHub\student_management\data.db')
+        conn = sqlite3.connect(r'C:\Users\sia\Documents\GitHub\student_management\data.db')
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO student_data VALUES(?,?,?,?)",(self.name.get(),self.roll.get(),self.dob.get(),self.gen.get()))
+        conn.commit()
+        conn.close()
+    def show_details(self):
+        root3 = Toplevel(self.root)
+        show = show_details_window(root3)
+
+class show_details_window:
+    def __init__(self,root):
+        self.root = root
+        self.root.geometry('800x500')
+        self.root.title("students viewer")
+        #==========================Show Frame
+        show_frame = Frame(self.root,bg = "#B402FE")
+        show_frame.place(width = 800,x = 0,y = 0 ,height = 50)
+        labl_show = Label(show_frame,bg = "#B402FE",fg = "white",font = ("lucida",25,"bold"),text = "Details of Students")
+        labl_show.pack()
+        #========================Main Frame
+        main_frame = Frame(self.root,bd = 10,relief = SUNKEN)
+        main_frame.place(width = 780,height = 430,x = 8,y = 58)
+        tree = ttk.Treeview(main_frame,height = 200)
+        tree['columns'] = ("Name","Roll No","D-O-B","Gender")
+        tree.column('#0',width=50,minwidth = 25)
+        tree.column('Name',width=50,minwidth = 25)
+        tree.column('Roll No',width=50,minwidth = 25)
+        tree.column('D-O-B',width=50,minwidth = 25)
+        tree.column('Gender',width=50,minwidth = 25)
+        tree.heading("#0",text = "ID",anchor = W)
+        tree.heading("Name",text = "Name",anchor = W)
+        tree.heading("Roll No",text = "Roll No",anchor = W)
+        tree.heading("D-O-B",text = "D-O-B",anchor = W)
+        tree.heading("Gender",text="Gender",anchor = W)
+        con = sq.connect('data.db')
         cursor = con.cursor()
-        cursor.execute("INSERT INTO stu_data VALUES(?,?,?,?)",(self.name.get(),self.roll.get(),self.dob.get(),self.gen.get()))
-        self.ent_name.delete(0,END)
-        con.commit()
-        con.close()
+        cursor.execute("SELECT * FROM stu_data")
+        result = cursor.fetchall()
+        for i in result:
+            tree.insert("","end",text = f"{i[0]}",values = (f'{i[1]}',f'{i[2]}',f'{i[3]}',f'{i[4]}'))
+        vsb = ttk.Scrollbar(main_frame,command = tree.yview,orient = "vertical")
+        tree.configure(yscroll = vsb.set)
+        vsb.pack(side = RIGHT,fill = Y)
+        tree.pack(side = TOP,fill = X)
 
 
 if __name__ == "__main__":

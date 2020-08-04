@@ -45,11 +45,10 @@ class login_window:
         c.execute(find_user,[(self.username_var.get()),(self.password.get())])
         result = c.fetchall()
         if result:
-            
             root2 = Toplevel(self.root)
             enter = enter_data_window(root2)
         else:
-            ms.showerror('Oops!','Username Not Found.')
+            ms.showerror('Error!','Username Not Found.')
 
     def register(self):
         	#Establish Connection
@@ -80,10 +79,6 @@ class login_window:
             conn.commit()
             conn.close()
 
-
-    def secondScreen(self):
-        root2 = Toplevel(self.root)
-        enter = enter_data_window(root2)
 class enter_data_window:
     def __init__(self,root):
         self.create_student_table()
@@ -142,6 +137,9 @@ class enter_data_window:
         cursor = conn.cursor()
         cursor.execute("INSERT INTO student_data VALUES(?,?,?,?)",
         (self.name.get(),self.roll.get(),self.dob.get(),self.gen.get()))
+        self.name.set("")
+        self.roll.set("")
+        self.dob.set("")
         conn.commit()
         conn.close()
     def show_details(self):

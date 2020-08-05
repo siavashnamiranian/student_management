@@ -77,6 +77,7 @@ class login_window:
                 )
             """)
             conn.commit()
+
             conn.close()
 
 class enter_data_window:
@@ -135,8 +136,8 @@ class enter_data_window:
     def submitdata(self):
         conn = sqlite3.connect(r'C:\Users\sia\Documents\GitHub\student_management\data.db')
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO student_data VALUES(?,?,?,?)",
-        (self.name.get(),self.roll.get(),self.dob.get(),self.gen.get()))
+        insert=("INSERT INTO student_data VALUES(?,?,?,?)")
+        cursor.execute(insert, (self.name.get(),self.roll.get(),self.dob.get(),self.gen.get()))
         self.name.set("")
         self.roll.set("")
         self.dob.set("")
@@ -164,10 +165,8 @@ class show_details_window:
         for row in rows:
             tree.insert("",END,values=row)
         conn.close()
-
         tree.pack()
         
-
 
 if __name__ == "__main__":
     root = Tk()
